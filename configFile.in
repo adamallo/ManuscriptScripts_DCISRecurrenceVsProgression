@@ -1,0 +1,17 @@
+aim1GeneticDataFile =
+aim1IntScoreDataFile =
+aim1IntRNDScoreDataFile =
+aim1DivergenceDataFile =
+aim1EMDistDataFile =
+aim1CDIScoreDataFile =
+aim4SNVDataFile =
+aim4CNADataByPatientFile =
+aim4CNADataBySampleFile =
+aim4ERDataFile =
+aim4GLUTDataFile =
+aim4ERPosERDataFile =
+aim4ERPosGLUTDataFile =
+aim4PhenotypicHeterDataFile =
+theClinicalDataFile =
+outDir = 
+mc.cores =
