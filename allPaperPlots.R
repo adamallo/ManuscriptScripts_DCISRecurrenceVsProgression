@@ -527,7 +527,7 @@ myggforest <- function(model, data = NULL,
 #' @return list of a forest plot and a km plot
 getForestAndKMCox <- function(theseDataPatients, coxModel, timeToEventVar, eventVar, theseColors, 
                               kmTitle = "KM plot", 
-                              kmYlab = "Event-free Survival", 
+                              kmYlab = "Event-free survival", 
                               forestTitle = "    Proportional Hazards Model",
                               termDict = NULL,
                               rel_height = 0.2){
@@ -655,7 +655,7 @@ getForestAndKMCoxFromData <- function(imputedData,originalData,freqs,minFreq,eve
 #' @return list of a forest plot and a km plot
 getKMPlotUnivariateCox <- function(theseData, thesePatients, coxModel, timeToEventVar, eventVar, theseColors, 
                                    title = "KM plot", 
-                                   ylab = "Event-free Survival",
+                                   ylab = "Event-free survival",
                                    xname = NULL){
   
   if(length(coxModel$coefficients) > 1)
@@ -960,17 +960,6 @@ clinicalVariablesThatMayBeConsidered=c("AgeAtDCISDiagnosis",
 )
 clinicalVariablesForNow=clinicalVariablesThatMayBeConsidered[1:(length(clinicalVariablesThatMayBeConsidered)-4)]
 
-###WARNING: Deleting patient information from these data.tables to make sure we are using the most updated patient information from clinicalData
-#####################################################################################
-for (theseData in list(aim4ERData,aim4GLUTData,aim4ERPosERData,aim4ERPosGLUTData)){
-  theseData[,`:=`(Cohort=NULL,Recurrence=NULL,Progression=NULL,OriginalCohort=NULL)]
-}
-aim4ERData <- merge(aim4ERData,theClinicalData[,.(Patient=patient,Cohort=Cohort,OriginalCohort=longNames[Cohort])],by="Patient")
-aim4GLUTData <- merge(aim4GLUTData,theClinicalData[,.(Patient=patient,Cohort=Cohort,OriginalCohort=longNames[Cohort])],by="Patient")
-aim4ERPosERData <- merge(aim4ERPosERData,theClinicalData[,.(Patient=patient,Cohort=Cohort,OriginalCohort=longNames[Cohort])],by="Patient")
-aim4ERPosGLUTData <- merge(aim4ERPosGLUTData,theClinicalData[,.(Patient=patient,Cohort=Cohort,OriginalCohort=longNames[Cohort])],by="Patient")
-
-##Combining the datsetes for multivariable modeling
 allAim4Data=merge(merge(aim4SNVData[,.(patient,SNVBurden,SNVDivergence)],aim4CNADataByPatient[,.(patient,CNADivergence,MeanAlteredP,AlteredP)],by="patient",all=T),aim4PhenotypicHeterData,by="patient",all=T)
 allAim4DataWClinical <- theClinicalData[allAim4Data]
 allAim4Data <- merge(allAim4Data,allAim4DataWClinical[,.(patient,Cohort,EventRecurrence,EventProgression)])
@@ -1129,7 +1118,7 @@ dataFig1=dcast(aim1GeneticData,value.var="SNV",Patient~Type)[,.(Patient,diffSNVs
                 annotations=c(pval),
                 textsize = ggsignifTextSize,
                 vjust = ggsignifTextVjust) +
-    scale_y_continuous(name="SNV Divergence (%)",limits=ylimits) +
+    scale_y_continuous(name="SNV divergence (%)",limits=ylimits) +
     scale_x_discrete(name="",labels=thisLabels[c(2,3,1)]) +
     scale_fill_manual(values=crossColors)+
     #scale_color_viridis_c(name="Difference",option="magma") +
@@ -1208,7 +1197,7 @@ pointRangeScaleFig3 <- 1 #Just in case we need to scale the size of pointRange p
     scale_fill_manual(values=crossColors)+
     scale_color_manual(values=crossColors)+
     theme(legend.position="none") + ##WARNING HARDCODED
-    labs(title="Phenotypic intensities")
+    labs(title="Phenotypic Intensities")
   
   #Fig3A, only significant ones (without multiple-test correction!)
   thisSortedMarkers=sortedMarkers[pwc$p<=alpha]
@@ -1326,7 +1315,7 @@ pointRangeScaleFig3 <- 1 #Just in case we need to scale the size of pointRange p
                 tip_length = ggsignifTipLength,
                 textsize = ggsignifTextSize,
                 vjust = ggsignifTextVjust) + 
-    scale_y_log10(name="Between-sample Divergence (EMD)",limits=ylimits) +
+    scale_y_log10(name="Between-sample divergence (EMD)",limits=ylimits) +
     scale_x_discrete(name="",labels=thisLabels) +
     scale_fill_manual(values=crossColors)+
     scale_color_manual(values=crossColors)+
@@ -1456,7 +1445,7 @@ pointRangeScaleFig3 <- 1 #Just in case we need to scale the size of pointRange p
                 tip_length = ggsignifTipLength,
                 textsize = ggsignifTextSize,
                 vjust = ggsignifTextVjust) + 
-    scale_y_log10(name="Between-sample Divergence (EMD)",limits=ylimits) +
+    scale_y_log10(name="Between-sample divergence (EMD)",limits=ylimits) +
     scale_x_discrete(name="",labels=thisLabels) +
     scale_fill_manual(values=crossColors)+
     scale_color_manual(values=crossColors)+
@@ -1520,7 +1509,7 @@ pointRangeScaleFig3 <- 1 #Just in case we need to scale the size of pointRange p
                 tip_length = ggsignifTipLength,
                 textsize = ggsignifTextSize,
                 vjust = ggsignifTextVjust) + 
-    scale_y_log10(name="Within-sample Divergence (CDI)",limits=ylimits) +
+    scale_y_log10(name="Within-sample divergence (CDI)",limits=ylimits) +
     scale_x_discrete(name="",labels=thisLabels) +
     scale_fill_manual(values=crossColors)+
     scale_color_manual(values=crossColors)+
@@ -1584,12 +1573,12 @@ pointRangeScaleFig3 <- 1 #Just in case we need to scale the size of pointRange p
                 tip_length = ggsignifTipLength,
                 textsize = ggsignifTextSize,
                 vjust = ggsignifTextVjust) + 
-    scale_y_log10(name="Intensity",limits=ylimits) +
+    scale_y_log10(name="Mean Intensity Score (MIS)",limits=ylimits) +
     scale_x_discrete(name="",labels=thisLabels) +
     scale_fill_manual(values=crossColors)+
     scale_color_manual(values=crossColors)+
     theme(legend.position="none") + ##WARNING HARDCODED
-    labs(title="Phenotypic intensities")
+    labs(title="Phenotypic Intensities")
   
   ncol <- 2
   nrow <- 1
@@ -2019,8 +2008,8 @@ aspectRatioFig6Mod <- 1.75
   # abs(diff(surv_median(progressionKMModel)$median))
   # surv_pvalue(progressionKMModel)
   #
-  # recurrenceKMPlot=getKMPlot(recurrenceKMModel,threshold = recurrenceThreshold,labelConstant = "SNVs",ylab = "Recurrence-free Survival",colors = c('#8F770099','#0073C299'),title="Recurrence")
-  # progressionKMPlot=getKMPlot(progressionKMModel,threshold = progressionThreshold,labelConstant = "SNVs",ylab = "Progression-free Survival",colors = c('#A7303099','#0073C299'),title="Progression")
+  # recurrenceKMPlot=getKMPlot(recurrenceKMModel,threshold = recurrenceThreshold,labelConstant = "SNVs",ylab = "Recurrence-free survival",colors = c('#8F770099','#0073C299'),title="Recurrence")
+  # progressionKMPlot=getKMPlot(progressionKMModel,threshold = progressionThreshold,labelConstant = "SNVs",ylab = "Progression-free survival",colors = c('#A7303099','#0073C299'),title="Progression")
   
   recurrenceKMPlot_Data <- allAim4DataWClinical[!is.na(SNVBurden),]
   recurrenceCoxModel <- coxph(Surv(TimeToEvent_mo,EventRecurrence) ~ SNVBurden, 
@@ -2058,7 +2047,7 @@ aspectRatioFig6Mod <- 1.75
                                               timeToEventVar = "TimeToEvent_mo",
                                               eventVar = "EventProgression",
                                               theseColors = c('#A7303099','#0073C299'),
-                                              title = "Progression from non-progressors",
+                                              title = "Progression from Nonprogressors",
                                               xname = "SNVs")
   
   progressionOnlyKMPlot_Data <- allAim4DataWClinical[!is.na(SNVBurden),][EventRecurrence==EventProgression,]
